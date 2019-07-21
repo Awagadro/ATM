@@ -3,25 +3,16 @@ package edu.dkravchuk.classes;
 import java.util.List;
 
 public class ATM {
-	private static int totalAmmount;
-	private static int availableAmmount;
-	private static final int DEPOSIT_LIMIT = 1000000;
+	private int totalAmmount;
+
 	private List<Account> accountList;
 
-	public static int getTotalAmmount() {
+	public int getTotalAmmount() {
 		return totalAmmount;
 	}
 
-	public static void setTotalAmmount(int totalAmmount) {
-		ATM.totalAmmount = totalAmmount;
-	}
-
-	public static int getAvailableAmmount() {
-		return availableAmmount;
-	}
-
-	public static void setAvailableAmmount(int availableAmmount) {
-		ATM.availableAmmount = availableAmmount;
+	public void setTotalAmmount(int totalAmmount) {
+		this.totalAmmount = totalAmmount;
 	}
 
 	public List<Account> getAccountList() {

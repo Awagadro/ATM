@@ -28,7 +28,7 @@ public class DataManager {
 			e.printStackTrace();
 		}
 
-		System.out.println("Initial data saved");
+		System.out.println("Data saved");
 	}
 
 	public ATM readFile() {
@@ -62,7 +62,7 @@ public class DataManager {
 
 	private static ATM parseDataFromFile(String[] tokens) {
 		ATM atm = new ATM();
-		ATM.setTotalAmmount(Integer.parseInt((tokens[0])));
+		atm.setTotalAmmount(Integer.parseInt((tokens[0])));
 		List<Account> accountList = new ArrayList<Account>();
 		for (int i = 1; i < tokens.length; i = i + 3) {
 			Account ac = new Account();

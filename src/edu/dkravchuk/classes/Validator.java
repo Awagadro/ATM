@@ -15,7 +15,26 @@ public class Validator {
 
 	}
 
-	public void validatePin(String id, int pin, ATM atm) {
+	public boolean validatePin(String pinCode, Account a) {
+		int pin = Integer.parseInt(pinCode);
+		if (pin == a.getPassword()) {
+			System.out.println("PIN correct");
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	public Integer validateAmmount(String s) {
+		Integer ammount = null;
+
+		try {
+			ammount = Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+
+		return ammount;
 	}
 
 }

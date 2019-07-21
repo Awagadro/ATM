@@ -15,13 +15,14 @@ public class Application {
 	private static ATM atm;
 	private static DataManager dm = new DataManager();
 	private static Validator val = new Validator();
+	private static final int DEPOSIT_LIMIT = 1000000;
 
 	public static void main(String[] args) {
 		atm = getATM();
 		StringBuffer sb = new StringBuffer();
 		Integer acIndex = null;
-		
-		
+		Boolean isCorrectPin = false;
+
 		System.out.println("Please enter your card number");
 		do {
 			sb.delete(0, sb.length());
@@ -35,10 +36,40 @@ public class Application {
 		} while (acIndex == null);
 
 		System.out.println("Please enter pin-code for the card: " + atm.getAccountList().get(acIndex).getCardId());
+		int attemptCount = 1;
+		do {
+			if (attemptCount > 3) {
+				System.out.println("You've reached the limit of available attempts to enter PIN");
+				break;
+			}
+			sb.delete(0, sb.length());
+			sb.append(getResponse());
+			isCorrectPin = val.validatePin(sb.toString(), atm.getAccountList().get(acIndex));
+			if (isCorrectPin == false) {
+				System.out.println("Please enter a valid PIN code");
+				attemptCount++;
+			} else {
+				break;
+			}
+		} while (isCorrectPin == false);
 
-//		resp = getResponse();
-//		System.out.println("PIN: " + resp);
+		if (isCorrectPin == true) {
+			System.out.printf(
+					"Welcome, your balance is: %s. Please choose operation: make a deposit (d), withdraw money (w), exit (any other key)",
+					atm.getAccountList().get(acIndex).getAccountBalance());
+			System.out.println();
 
+			sb.delete(0, sb.length());
+			sb.append(getResponse());
+			if (sb.toString().equals("d")) {
+				deposit(atm, acIndex);
+			}
+			if (sb.toString().equals("w")) {
+				withdraw(atm, acIndex);
+			} else {
+				return;
+			}
+		}
 	}
 
 	private static ATM getATM() {
@@ -51,7 +82,7 @@ public class Application {
 
 	private static ATM setInitialData() {
 		ATM atm = new ATM();
-		ATM.setTotalAmmount(20000000);
+		atm.setTotalAmmount(20000000);
 
 		List<Account> accountList = new ArrayList<>();
 		// create account1
@@ -98,4 +129,55 @@ public class Application {
 		}
 		return s;
 	}
+
+	private static void deposit(ATM atm, Integer acIndex) {
+		System.out.println("Please enter the transfer amount for deposit");
+		StringBuffer sb = new StringBuffer();
+		Integer depoAmmount = null;
+		do {
+			sb.delete(0, sb.length());
+			sb.append(getResponse());
+			depoAmmount = val.validateAmmount(sb.toString());
+			if ((depoAmmount == null) || (depoAmmount > DEPOSIT_LIMIT)) {
+				System.out.println("You should enter a summ under " + DEPOSIT_LIMIT);
+			} else {
+				atm.setTotalAmmount(atm.getTotalAmmount() + depoAmmount);
+				int temp = atm.getAccountList().get(acIndex).getAccountBalance();
+				atm.getAccountList().get(acIndex).setAccountBalance(temp + depoAmmount);
+				System.out.println("Operation success. Now your balance is: "
+						+ atm.getAccountList().get(acIndex).getAccountBalance());
+				dm.printFile(atm);
+
+				break;
+			}
+		} while ((depoAmmount == null) || (depoAmmount > DEPOSIT_LIMIT));
+
+	}
+
+	private static void withdraw(ATM atm, Integer acIndex) {
+		System.out.println("Please enter the transfer amount for withdraw");
+		StringBuffer sb = new StringBuffer();
+		Integer wAmmount = null;
+		final int withdrawLimit = Math.min(atm.getTotalAmmount(),
+				atm.getAccountList().get(acIndex).getAccountBalance());
+		do {
+			sb.delete(0, sb.length());
+			sb.append(getResponse());
+			wAmmount = val.validateAmmount(sb.toString());
+			if ((wAmmount == null) || (wAmmount > withdrawLimit)) {
+				System.out.println("You should enter a summ under " + withdrawLimit);
+			} else {
+				atm.setTotalAmmount(atm.getTotalAmmount() - wAmmount);
+				int temp = atm.getAccountList().get(acIndex).getAccountBalance();
+				atm.getAccountList().get(acIndex).setAccountBalance(temp - wAmmount);
+				System.out.println("Operation success. Now your balance is: "
+						+ atm.getAccountList().get(acIndex).getAccountBalance());
+				dm.printFile(atm);
+
+				break;
+			}
+		} while ((wAmmount == null) || (wAmmount > withdrawLimit));
+
+	}
+
 }
