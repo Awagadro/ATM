@@ -2,6 +2,7 @@ package edu.dkravchuk;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import edu.dkravchuk.classes.ATM;
 import edu.dkravchuk.classes.Account;
@@ -12,8 +13,18 @@ public class Application {
 	private static DataManager dm = new DataManager();
 
 	public static void main(String[] args) {
-
 		atm = getATM();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter your card number");
+		String num = sc.next();
+
+		System.out.println("Please enter pin-code for the card: " + num);
+		
+		int pin = sc.nextInt();
+		System.out.println("PIN: " + pin);
+		
+		
+		sc.close();
 
 	}
 
@@ -26,7 +37,6 @@ public class Application {
 	}
 
 	private static ATM setInitialData() {
-
 		ATM atm = new ATM();
 		ATM.setTotalAmmount(20000000);
 

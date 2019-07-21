@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataManager {
 
@@ -43,15 +45,35 @@ public class DataManager {
 			}
 //			System.out.println(sb);
 			br.close();
+
+			String[] tokens = sb.toString().split(" ");
+			atm = parseDataFromFile(tokens);
+
 		} catch (IOException e) {
 			System.out.println("Data file is missing!");
-			
-			return null;
+
+			return atm;
 		}
 
 		System.out.println("Data file uploaded");
 		return atm;
 
+	}
+
+	private static ATM parseDataFromFile(String[] tokens) {
+		ATM atm = new ATM();
+		ATM.setTotalAmmount(Integer.parseInt((tokens[0])));
+		List<Account> accountList = new ArrayList<Account>();
+		for (int i = 1; i < tokens.length; i = i + 3) {
+			Account ac = new Account();
+			ac.setCardId(tokens[i]);
+			ac.setPassword(Integer.parseInt((tokens[i + 1])));
+			ac.setAccountBalance(Integer.parseInt((tokens[i + 2])));
+			accountList.add(ac);
+		}
+
+		atm.setAccountList(accountList);
+		return atm;
 	}
 
 }
