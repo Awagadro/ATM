@@ -1,30 +1,43 @@
 package edu.dkravchuk;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import edu.dkravchuk.classes.ATM;
 import edu.dkravchuk.classes.Account;
 import edu.dkravchuk.classes.DataManager;
+import edu.dkravchuk.classes.Validator;
 
 public class Application {
 	private static ATM atm;
 	private static DataManager dm = new DataManager();
+	private static Validator val = new Validator();
 
 	public static void main(String[] args) {
 		atm = getATM();
-		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		Integer acIndex = null;
+		
+		
 		System.out.println("Please enter your card number");
-		String num = sc.next();
+		do {
+			sb.delete(0, sb.length());
+			sb.append(getResponse());
+			acIndex = val.validateCardId(sb.toString(), atm);
+			if (acIndex == null) {
+				System.out.println("Please enter a valid card number");
+			} else {
+				break;
+			}
+		} while (acIndex == null);
 
-		System.out.println("Please enter pin-code for the card: " + num);
-		
-		int pin = sc.nextInt();
-		System.out.println("PIN: " + pin);
-		
-		
-		sc.close();
+		System.out.println("Please enter pin-code for the card: " + atm.getAccountList().get(acIndex).getCardId());
+
+//		resp = getResponse();
+//		System.out.println("PIN: " + resp);
 
 	}
 
@@ -73,5 +86,16 @@ public class Application {
 
 		dm.printFile(atm);
 		return atm;
+	}
+
+	private static String getResponse() {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String s = null;
+		try {
+			s = reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return s;
 	}
 }

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import edu.dkravchuk.classes.ATM;
 import edu.dkravchuk.classes.Account;
@@ -56,4 +57,18 @@ public class Test {
 		atm.setAccountList(accountList);
 	}
 
+	private static String getResponse() {
+		Scanner sc = new Scanner(System.in);
+		String resp = null;
+		resp = sc.nextLine();
+
+//		if (resp.equals("x")) {
+//			System.out.println("Good bue!");
+//			sc.close();
+//			return null;
+//		}
+		sc.close();
+		return resp;
+
+	}
 }
