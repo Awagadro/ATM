@@ -74,7 +74,7 @@ public class Application {
 
 	private static ATM getATM() {
 		atm = dm.readFile();
-		if (atm == null) {
+		if (atm.getAccountList() == null) {
 			atm = setInitialData();
 		}
 		return atm;

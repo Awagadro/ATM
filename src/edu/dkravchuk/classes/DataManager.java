@@ -49,7 +49,7 @@ public class DataManager {
 			String[] tokens = sb.toString().split(" ");
 			atm = parseDataFromFile(tokens);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Data file is missing!");
 
 			return atm;

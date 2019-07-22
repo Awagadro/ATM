@@ -3,11 +3,11 @@ package edu.dkravchuk.classes;
 import java.util.List;
 
 public class ATM {
-	private int totalAmmount;
+	private Integer totalAmmount;
 
 	private List<Account> accountList;
 
-	public int getTotalAmmount() {
+	public Integer getTotalAmmount() {
 		return totalAmmount;
 	}
 
